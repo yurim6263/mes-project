@@ -35,6 +35,14 @@
 - AI 도구 사용 내역은 `docs/ai-usage.md`에 그날 적는다 (무엇을 맡겼고 무엇을 직접 했는지).
 - 매일 커밋한다. **커밋·푸시는 사용자가 요청할 때만** 한다.
 
+## Git 규칙
+- 원격: `origin` = `https://github.com/yurim6263/mes-project.git` (**공개 저장소**). 올리기 전에 개인 경로·비밀값이 없는지 확인한다.
+- **올릴 때는 항상 브랜치를 따서 PR로 올린다. `main`에 직접 푸시하지 않는다.** (사용자 지시, 2026-11-17. 원격이 비어 있던 최초 1회만 기준 커밋을 `main`에 올렸다.)
+- 브랜치 이름: `<종류>/<짧은-설명>` (예: `feat/work-order-api`, `docs/erd`, `chore/initial-setup`). 커밋 메시지는 `종류: 한 줄 요약`.
+- 순서: 최신 `main`에서 브랜치 생성 → 커밋 → 푸시 → `gh pr create`(제목·본문에 한 일, 확인한 것, 한계) → **PR 주소를 사용자에게 알린다.**
+- **PR 머지는 사용자가 한다.** 사용자가 시키기 전에는 머지하지 않는다. 머지 후에는 `main`을 받아(pull) 다음 브랜치를 만든다.
+- PR은 `docs/history`에도 한 줄 남긴다(브랜치명, PR 번호, 상태).
+
 ## 환경
 - Windows 11, RAM 16GB, 주 40시간 × 4주.
 - 스택: Java 17 + Spring Boot 3.5 (Gradle) / **Oracle Free 23ai + MyBatis**(2026-11-17 반영·동작 확인) / Python asyncua 시뮬레이터 / Eclipse Milo 수집기 / React + Vite(TypeScript) / Docker Compose.

@@ -99,3 +99,16 @@
 - 전체 기동 `docker compose up -d --build`, 종료 `docker compose stop`. Oracle 첫 기동은 느릴 수 있음(이미지는 이미 받아 둠).
 - Oracle 습관: 식별자 대문자, 빈 문자열=NULL, `LIMIT` 없음. Flyway 이력 테이블은 소문자 따옴표 이름(`"flyway_schema_history"`).
 - 백엔드 테스트: `backend`에서 `gradlew.bat test` (Docker 켜짐 + JAVA_HOME=JDK 17 필요).
+
+---
+
+## 추가 — Git: 첫 커밋과 PR #1, 앞으로의 올리기 규칙
+
+- 원격 `origin`은 이미 `https://github.com/yurim6263/mes-project.git`(**공개**, 비어 있었음)이었다. (앞서 "원격이 없다"고 말한 것은 오류였음)
+- **사용자 지시: 앞으로 깃에 올릴 때는 항상 브랜치를 따서 PR로 올린다.** 규칙은 `CLAUDE.md` "Git 규칙"에 적음. PR 머지는 사용자가 한다.
+- 원격이 비어 있어 PR의 기준 브랜치가 없었으므로, `.gitignore`만 담은 기준 커밋(`dfe0c8f`)을 **`main`에 1회 직접 푸시**했다. 로컬 `main`도 이 커밋으로 맞춤.
+- 기존 로컬 커밋(`64c75f0`)은 같은 내용(트리 동일 확인함)으로 기준 커밋 위에 다시 만들어(`908efff`) 브랜치 `chore/initial-setup`로 푸시하고 **PR #1**을 열었다: https://github.com/yurim6263/mes-project/pull/1 — 상태: **열림, 머지 대기(사용자 검토)**.
+- 이 PR에는 history 문서의 PC 경로(`C:\Users\dbfla\...`) 등이 그대로 들어 있다(공개 저장소). 사용자에게 알렸고 별도 지시는 없었음.
+
+### 다음에 할 일 (추가)
+- PR #1 머지 여부를 확인하고, 머지되면 `git checkout main && git pull` 후 새 브랜치(예: `docs/requirements`)에서 1주차 작업을 시작한다.
