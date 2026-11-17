@@ -1,0 +1,26 @@
+# 환경 값
+.env
+
+# Java / Gradle / Maven
+build/
+.gradle/
+target/
+*.class
+*.log
+
+# Node
+node_modules/
+dist/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+desktop.ini
