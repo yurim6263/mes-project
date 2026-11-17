@@ -1,0 +1,61 @@
+# SMT 라인 미니 MES — 로컬 개발용 compose (비밀번호는 로컬 전용 기본값)
+#
+#   docker compose up -d --build     전부 기동 (db · simulator · backend · frontend)
+#   docker compose up -d db          DB 만
+#   docker compose down              종료 (데이터 유지) / down -v 는 DB 데이터까지 삭제
+
+name: smt-mes
+
+services:
+  db:
+    image: gvenzl/oracle-free:23-slim-faststart   # Oracle Database Free 23ai (접속: FREEPDB1)
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:-mes}         # SYS/SYSTEM 비밀번호 (로컬 개발용)
+      APP_USER: ${APP_USER:-mes}                        # 앱이 쓰는 계정
+      APP_USER_PASSWORD: ${APP_USER_PASSWORD:-mes}
+    ports:
+      - "1521:1521"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 40s
+
+  # 가상 설비 5대(PRT-01, MNT-01, MNT-02, RFL-01, AOI-01)를 OPC UA 서버로 노출 (Python asyncua)
+  simulator:
+    build: ./simulator
+    ports:
+      - "4840:4840"   # OPC UA 기본 포트 — UaExpert 로 opc.tcp://localhost:4840 접속
+
+  # Spring Boot API + OPC UA 수집기(Eclipse Milo, collector 패키지)
+  backend:
+    build: ./backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@//db:1521/FREEPDB1
+      SPRING_DATASOURCE_USERNAME: ${APP_USER:-mes}
+      SPRING_DATASOURCE_PASSWORD: ${APP_USER_PASSWORD:-mes}
+      MES_OPCUA_ENDPOINT: opc.tcp://simulator:4840
+      JAVA_TOOL_OPTIONS: -Xmx512m
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+      simulator:
+        condition: service_started
+
+  # React + Vite 화면 (작업지시 / 설비 현황 / LOT 추적 / 대시보드)
+  frontend:
+    build: ./frontend
+    environment:
+      VITE_API_URL: http://localhost:8080
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  oracle-data:

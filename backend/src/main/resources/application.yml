@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: smt-mes
+  datasource:
+    # 로컬 개발 기본값(Oracle Free, compose db). compose 안에서는 환경변수(SPRING_DATASOURCE_*)가 덮어쓴다.
+    url: jdbc:oracle:thin:@//localhost:1521/FREEPDB1
+    username: mes
+    password: mes
+  flyway:
+    enabled: true
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true   # work_order_id → workOrderId
+
+mes:
+  opcua:
+    endpoint: opc.tcp://localhost:4840   # 시뮬레이터 (compose 안에서는 MES_OPCUA_ENDPOINT)
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
